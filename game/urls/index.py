@@ -9,5 +9,3 @@ urlpatterns = [
     path("playground/", include("game.urls.playground.index")),
     path("settings/", include("game.urls.setting.index")),
 ]
-
-
