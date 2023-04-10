@@ -37,4 +37,13 @@
 .ac-game-menu-field-item:hover{
     transform:scale(1.2);
     transition:100ms;
+
+}
+.ac-game-playground {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+    background-color: grey;
+}
+
 }

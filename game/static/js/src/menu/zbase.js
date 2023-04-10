@@ -27,7 +27,7 @@ class AcGameMenu{
         this.$setting = this.$menu.find('.ac-game-menu-field-item-setting');
 
         this.start();
-    }
+   }
     start(){
         this.add_listening_events();
     }
