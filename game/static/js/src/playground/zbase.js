@@ -4,7 +4,6 @@ class AcGamePlayground {
         this.$playground = $(`<div>游戏界面</div>`);
         this.$playground = $(`<div class="ac-game-playground"></div>`);
 
-        this.hide();
         // this.hide();
         this.root.$ac_game.append(this.$playground);
         this.width = this.$playground.width();
