@@ -84,6 +84,7 @@ class AcGameObject {
                 break;
             }
         }
+        console.log("duixiang"+AC_GAME_OBJECTS.length);
     }
 }
 
@@ -215,10 +216,10 @@ class Player extends AcGameObject {
         //canvas：监测鼠标
         this.playground.game_map.$canvas.mousedown(function(e){
             const rect=outer.ctx.canvas.getBoundingClientRect();
-            
-            if(e.which===3){
+
+            if(e.which===3&&outer.radius>=10){
                 outer.move_to(e.clientX - rect.left,e.clientY - rect.top);
-            }else if(e.which===1){
+            }else if(e.which===1&&outer.radius>=10){
                 if(outer.cur_skill==="fireball"){
                     outer.shoot_fireball(e.clientX - rect.left, e.clientY -rect.top);
                 }
@@ -228,12 +229,13 @@ class Player extends AcGameObject {
 
         //window程序调用：监测键盘
         $(window).keydown(function(e){
-            if(e.which===81){
+            if(e.which===81&&outer.radius>=10){
                 outer.cur_skill="fireball";
                 return false;
             }
         });
     }
+
     shoot_fireball(nx,ny){
         let x=this.x, y=this.y;
         let radius=this.playground.height*0.01;
@@ -323,13 +325,16 @@ class Player extends AcGameObject {
         this.ctx.fill();
     }
 
-    on_destroy() {
+    on_destory() {
         //基类的destory实现从渲染对象列表中删除，继承类根据需要实现其他信息的删除
         for (let i = 0; i < this.playground.players.length; i ++ ) {
             if (this.playground.players[i] === this) {
                 this.playground.players.splice(i, 1);
             }
         }
+        //4.1（debug：死亡时清除监听）
+
+        console.log(this.playground.players.length);
     }
 }
 
