@@ -14,7 +14,7 @@ class Setting {
         </div>
         <div class="ac-game-settings-username">
             <div class="ac-game-settings-item">
-                <input type="text" placeholder="用户名">
+                 <input type="text" placeholder="用户名">
             </div>
         </div>
         <div class="ac-game-settings-password">
@@ -152,7 +152,7 @@ class Setting {
             success: function(resp) {
                 console.log(resp);
                 if (resp.result === "success") {
-                    location.reload();
+                    location.reload();//第三方登录成功也是刷新一下页面，此时cookie里有登录信息
                 } else {
                     outer.$login_error_message.html(resp.result);
                 }
@@ -196,7 +196,7 @@ class Setting {
                 console.log(resp);
                 if (resp.result === "success") {
                     location.reload();
-                }
+                } 
             }
         });
     }
@@ -225,7 +225,7 @@ class Setting {
                 if (resp.result === "success") {
                     outer.username = resp.username;
                     outer.photo = resp.photo;
-                    console.log(outer.photo);
+                    //console.log(outer.photo);
                     outer.hide();
                     outer.root.menu.show();
                 } else {

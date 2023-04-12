@@ -8,7 +8,7 @@ def signout(request):
         return JsonResponse({
             'result': "success",
         })
-    logout(request)
+    logout(request) # request 中删掉cookie
     return JsonResponse({
         'result': "success",
     })

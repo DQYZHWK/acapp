@@ -13,6 +13,6 @@ def signin(request):
         })
     login(request, user)
     return JsonResponse({
-        'result': "success"
+         'result': "success"
     })
 
