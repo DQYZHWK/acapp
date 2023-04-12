@@ -20,6 +20,7 @@ class AcGameMenu{
              </div>
         </div>
 `);
+        this.$menu.hide();
         this.root.$ac_game.append(this.$menu);//add content to AcGame banding de div
         this.$single = this.$menu.find('.ac-game-menu-field-item-single');//根据类名找标签对象
 
@@ -43,8 +44,8 @@ class AcGameMenu{
             console.log("click multi mode");
         });
         this.$setting.click(function(){
-
             console.log("click setting ");
+            outer.root.setting.logout_on_remote();
         });
     }
     
