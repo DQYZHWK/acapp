@@ -11,7 +11,7 @@ def signin(request):
         return JsonResponse({
             'result': "用户名或密码不正确"
         })
-    login(request, user)
+    login(request, user)               # cookie中加入user信息
     return JsonResponse({
          'result': "success"
     })
