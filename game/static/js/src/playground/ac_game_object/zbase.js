@@ -26,7 +26,6 @@ class AcGameObject {
                 break;
             }
         }
-        console.log("duixiang"+AC_GAME_OBJECTS.length);
     }
 }
 
