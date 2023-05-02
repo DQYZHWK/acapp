@@ -20,7 +20,7 @@ class AcGameMenu{
              </div>
         </div>
 `);
-        this.$menu.hide();
+       // this.$menu.hide();
         this.root.$ac_game.append(this.$menu);//add content to AcGame banding de div
         this.$single = this.$menu.find('.ac-game-menu-field-item-single');//根据类名找标签对象
 
@@ -38,13 +38,15 @@ class AcGameMenu{
         let outer=this;
         this.$single.click(function(){
             outer.hide();//close menu
-            outer.root.playground.show();
+            outer.root.playground.show("single mode");
         });
         this.$multi.click(function(){
             console.log("click multi mode");
+            outer.hide();
+            outer.root.playground.show("multi mode");
         });
         this.$setting.click(function(){
-            console.log("click setting ");
+            console.log("click settings");
             outer.root.setting.logout_on_remote();
         });
     }
