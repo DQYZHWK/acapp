@@ -24,19 +24,28 @@ class FireBall extends AcGameObject{
             return false;
         }
         //渲染前更新最新信息
+        this.update_move();
+        //碰撞检测交由产生这个子弹的窗口，保证各个窗口内状态一致
+        if(this.player.character !== "enemy")
+            this.update_attack();
+
+        this.render();
+    }
+    update_move(){
         let moved=Math.min(this.move_length,this.speed*this.timedelta/1000);
         this.x+=this.vx*moved;
         this.y+=this.vy*moved;
         this.move_length-=moved;
 
-        for(let i=0;i<this.playground.players.length;i++){
+    }
+    update_attack(){
+         for(let i=0;i<this.playground.players.length;i++){
             let player=this.playground.players[i];
             if(this.player!=player&&this.is_collision(player)){
                 this.attack(player);
+                break;
             }
         }
-
-        this.render();
     }
     render(){
         let scale=this.playground.scale;
@@ -52,7 +61,7 @@ class FireBall extends AcGameObject{
         let dy=y1-y2;
         return Math.sqrt(dx*dx+dy*dy);
     }
-
+    
     is_collision(player){
         let distance=this.get_dist(player.x,player.y,this.x,this.y);
         if(distance<this.radius+player.radius)return true;
@@ -63,6 +72,19 @@ class FireBall extends AcGameObject{
     attack(player){
         let angle=Math.atan2(player.y-this.y,player.x-this.x);
         player.is_attacked(angle,this.damage);
+        if(this.playground.mode === "multi mode"){
+            this.playground.mps.send_attack(player.uuid, player.x, player.y, angle, this.damage, this.uuid);
+        }
         this.destory();
+    }
+    
+    on_destory(){ //达到射程极限：毁一个对象，需要清除他的所有引用
+        let fireballs = this.player.fireballs;
+        for (let i=0;i<fireballs.length;i++){
+            if(fireballs[i] === this){
+                fireballs.splice(i,1);
+                break;
+            }
+        }
     }
 }

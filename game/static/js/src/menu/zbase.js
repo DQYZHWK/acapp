@@ -34,19 +34,16 @@ class AcGameMenu{
     }
 
     add_listening_events(){
-        //console.log("yegou");
         let outer=this;
         this.$single.click(function(){
             outer.hide();//close menu
             outer.root.playground.show("single mode");
         });
         this.$multi.click(function(){
-            console.log("click multi mode");
             outer.hide();
             outer.root.playground.show("multi mode");
         });
         this.$setting.click(function(){
-            console.log("click settings");
             outer.root.setting.logout_on_remote();
         });
     }

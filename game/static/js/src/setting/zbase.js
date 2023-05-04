@@ -176,7 +176,6 @@ class Setting {
                 password: password,
             },
             success: function(resp) {
-                console.log(resp);
                 if (resp.result === "success") {
                     location.reload();//第三方登录成功也是刷新一下页面，此时cookie里有登录信息
                 } else {
@@ -218,7 +217,6 @@ class Setting {
             url: "https://app5236.acapp.acwing.com.cn/setting/logout/",
             type: "GET",
             success: function(resp) {
-                console.log(resp);
                 if (resp.result === "success") {
                     location.reload();
                 } 
@@ -237,7 +235,6 @@ class Setting {
     }
     acapp_login(appid, redirect_uri, scope, state) {
         let outer = this;
-        console.log("acapp_login");
         this.root.acwingos.api.oauth2.authorize(appid, redirect_uri, scope, state, function(resp) {
             if (resp.result === "success") {
                 outer.username = resp.username;
