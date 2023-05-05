@@ -14,7 +14,7 @@ class AcGameMenu{
                    </div>
                    <br>
                    <div class="ac-game-menu-field-item ac-game-menu-field-item-setting">
-                        设置
+                        退出
                    </div>
 
              </div>
