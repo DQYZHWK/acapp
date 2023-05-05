@@ -132,7 +132,6 @@ class MultiPlayerSocket {
     
     send_flash(tx,ty){
         let outer = this;
-        console.log("5.5.1");
         this.ws.send(JSON.stringify({
             'event' : "flash",
             'uuid' : outer.uuid,

@@ -67,8 +67,7 @@ class Player extends AcGameObject {
         this.playground.game_map.$canvas.mousedown(function(e){
 
             if (outer.playground.state !=="fighting")
-                return false;
-
+                return true;
             const rect=outer.ctx.canvas.getBoundingClientRect();
 
             if(e.which===3&&outer.radius>outer.eps){
@@ -105,8 +104,8 @@ class Player extends AcGameObject {
 
         });
 
-        //window程序调用：监测键盘
-        $(window).keydown(function(e){
+        //window程序调用：监测键盘 -> canvas检测键盘事件，注意参数tabindex=1
+        this.playground.game_map.$canvas.keydown(function(e) {
             if (outer.playground.state!== "fighting")
                 return true;
             if(e.which===81&&outer.radius>=outer.eps){
