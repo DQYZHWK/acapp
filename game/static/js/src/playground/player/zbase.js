@@ -61,7 +61,7 @@ class Player extends AcGameObject {
     add_listening_events(){
         let outer=this;
         //防止鼠标右键出现奇怪的东西
-        this.playground.game_map.$canvas.on("contextmenu",function(e){return false;});
+        this.playground.game_map.$canvas.on("contextmenu",function(){return false;});
 
         //canvas：监测鼠标
         this.playground.game_map.$canvas.mousedown(function(e){
@@ -106,6 +106,17 @@ class Player extends AcGameObject {
 
         //window程序调用：监测键盘 -> canvas检测键盘事件，注意参数tabindex=1
         this.playground.game_map.$canvas.keydown(function(e) {
+            if(e.which === 13){
+                if(outer.playground.mode === "multi mode"){
+                    outer.playground.chat_field.show_input();//转移焦点到输入框
+                    return false;
+                }
+            }
+            else if(e.which===27){
+                if(outer.playground.mode === "multi mode"){
+                    outer.playground.chat_field.hide_input();
+                }
+            }
             if (outer.playground.state!== "fighting")
                 return true;
             if(e.which===81&&outer.radius>=outer.eps){

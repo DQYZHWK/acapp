@@ -51,9 +51,10 @@ class AcGamePlayground {
             }  
         }
         else if (mode === "multi mode"){
+            this.chat_field = new ChatField(this);
             this.mps = new MultiPlayerSocket(this);
             this.mps.uuid = this.players[0].uuid;
-
+            
             this.mps.ws.onopen = function(){ // wss连接创建成功的回调函数 
                 outer.mps.send_create_player(outer.root.setting.username, outer.root.setting.photo);
             };

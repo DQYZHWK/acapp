@@ -182,7 +182,7 @@
 }
 
 .ac-game-chat-field-history::-webkit-scrollbar {
-    width: 0;
+    width : 0px;
 }
 
 .ac-game-chat-field-input {

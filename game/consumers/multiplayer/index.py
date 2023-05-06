@@ -117,18 +117,18 @@ class MultiPlayer(AsyncWebsocketConsumer):
                 'ty' : data['ty'],
             }
         )
-    async def message(self,data):
+    async def message(self, data):
         await self.channel_layer.group_send(
             self.room_name,
             {
-                'tpye' : "group_send_event",
-                'event' : "message",
-                'uuid' : data['uuid'],
-                'username' :data['username'],
-                'text' : data['text'],
-
+                'type': "group_send_event",
+                'event': "message",
+                'uuid': data['uuid'],
+                'username': data['username'],
+                'text': data['text'],
             }
         )
+
     async def receive(self, text_data): # st2:server receive the request
         data = json.loads(text_data)
         event = data['event']

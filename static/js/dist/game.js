@@ -117,6 +117,83 @@ let AC_GAME_ANIMATION = function(timestamp) {
 
 requestAnimationFrame(AC_GAME_ANIMATION);//游戏引擎实现每秒60帧的渲染
 
+class ChatField {
+    constructor(playground) {
+        this.playground = playground;
+
+        this.$history = $(`<div class="ac-game-chat-field-history">历史记录</div>`);
+        this.$input = $(`<input type="text" class="ac-game-chat-field-input">`);
+
+        this.$history.hide();
+        this.$input.hide();
+
+        this.func_id = null;
+
+        this.playground.$playground.append(this.$history);
+        this.playground.$playground.append(this.$input);
+
+        this.start();
+    }
+
+    start() {
+        this.add_listening_events();
+    }
+
+    add_listening_events() {
+        let outer = this;
+
+        this.$input.keydown(function(e) {
+            if (e.which === 27) {  // ESC
+                outer.hide_input();
+                return false;
+            } else if (e.which === 13) {  // ENTER
+                let username = outer.playground.root.setting.username;
+                let text = outer.$input.val();
+                if (text) {
+                    outer.$input.val("");
+                    outer.add_message(username, text);
+                    outer.playground.mps.send_message(username, text);
+                }
+                return false;
+            }
+        });
+    }
+
+    render_message(message) {
+        return $(`<div>${message}</div>`);
+    }
+
+    add_message(username, text) {
+        this.show_history();
+        let message = `[${username}]${text}`;
+        this.$history.append(this.render_message(message));
+        this.$history.scrollTop(this.$history[0].scrollHeight);
+    }
+
+    show_history() {
+        let outer = this;
+        this.$history.fadeIn();
+
+        if (this.func_id) clearTimeout(this.func_id);
+
+        this.func_id = setTimeout(function() {
+            outer.$history.fadeOut();
+            outer.func_id = null;
+        }, 3000);
+    }
+
+    show_input() {
+        this.show_history();
+
+        this.$input.show();
+        this.$input.focus();
+    }
+
+    hide_input() {
+        this.$input.hide();
+        this.playground.game_map.$canvas.focus();
+    }
+}
 class GameMap extends AcGameObject {
     constructor(playground) {
         super();
@@ -281,7 +358,7 @@ class Player extends AcGameObject {
     add_listening_events(){
         let outer=this;
         //防止鼠标右键出现奇怪的东西
-        this.playground.game_map.$canvas.on("contextmenu",function(e){return false;});
+        this.playground.game_map.$canvas.on("contextmenu",function(){return false;});
 
         //canvas：监测鼠标
         this.playground.game_map.$canvas.mousedown(function(e){
@@ -326,6 +403,17 @@ class Player extends AcGameObject {
 
         //window程序调用：监测键盘 -> canvas检测键盘事件，注意参数tabindex=1
         this.playground.game_map.$canvas.keydown(function(e) {
+            if(e.which === 13){
+                if(outer.playground.mode === "multi mode"){
+                    outer.playground.chat_field.show_input();//转移焦点到输入框
+                    return false;
+                }
+            }
+            else if(e.which===27){
+                if(outer.playground.mode === "multi mode"){
+                    outer.playground.chat_field.hide_input();
+                }
+            }
             if (outer.playground.state!== "fighting")
                 return true;
             if(e.which===81&&outer.radius>=outer.eps){
@@ -673,6 +761,9 @@ class MultiPlayerSocket {
             else if(event === "flash"){
                outer.receive_flash(uuid, data.tx, data.ty);
             }
+            else if(event === "message"){
+                outer.receive_message(uuid,data.username,data.text);
+            }
         };
     }
     // st1:client to server
@@ -784,6 +875,20 @@ class MultiPlayerSocket {
             player.flash(tx,ty);
         }
     }
+
+   send_message(username, text) {
+        let outer =this;
+        this.ws.send(JSON.stringify({
+            'event': "message",
+            'uuid': outer.uuid,
+            'username': username,
+            'text': text,
+        }));
+    }
+
+    receive_message(uuid, username, text) {
+        this.playground.chat_field.add_message(username, text);
+    }
 }
 
 class AcGamePlayground {
@@ -839,9 +944,10 @@ class AcGamePlayground {
             }  
         }
         else if (mode === "multi mode"){
+            this.chat_field = new ChatField(this);
             this.mps = new MultiPlayerSocket(this);
             this.mps.uuid = this.players[0].uuid;
-
+            
             this.mps.ws.onopen = function(){ // wss连接创建成功的回调函数 
                 outer.mps.send_create_player(outer.root.setting.username, outer.root.setting.photo);
             };
