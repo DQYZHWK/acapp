@@ -1,0 +1,4 @@
+channels==3.0.4
+Django==3.2.8
+Requests==2.31.0
+
